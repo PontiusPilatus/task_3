@@ -1,0 +1,65 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "/Users/bublikkasirin/ModuleBank/Task_3/WebApi_Transit_PSQL_Dapper/WebApi_Transit_PSQL_Dapper/WebApi_Transit_PSQL_Dapper.csproj",
+    "projectName": "WebApi_Transit_PSQL_Dapper",
+    "projectPath": "/Users/bublikkasirin/ModuleBank/Task_3/WebApi_Transit_PSQL_Dapper/WebApi_Transit_PSQL_Dapper/WebApi_Transit_PSQL_Dapper.csproj",
+    "outputPath": "/Users/bublikkasirin/ModuleBank/Task_3/WebApi_Transit_PSQL_Dapper/WebApi_Transit_PSQL_Dapper/obj/",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.1"
+    ],
+    "frameworks": {
+      "netcoreapp2.1": {
+        "projectReferences": {}
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.1": {
+      "dependencies": {
+        "Autofac.Extensions.DependencyInjection": {
+          "target": "Package",
+          "version": "[4.4.0, )"
+        },
+        "Dapper": {
+          "target": "Package",
+          "version": "[1.60.6, )"
+        },
+        "MassTransit.RabbitMQ": {
+          "target": "Package",
+          "version": "[5.5.0-develop.2000, )"
+        },
+        "Microsoft.AspNetCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.1, )",
+          "autoReferenced": true
+        },
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.0, )",
+          "autoReferenced": true
+        },
+        "Npgsql": {
+          "target": "Package",
+          "version": "[4.0.6, )"
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}
