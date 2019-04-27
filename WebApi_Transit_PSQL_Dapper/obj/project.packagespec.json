@@ -26,17 +26,21 @@
   "frameworks": {
     "netcoreapp2.1": {
       "dependencies": {
-        "Autofac.Extensions.DependencyInjection": {
-          "target": "Package",
-          "version": "[4.4.0, )"
-        },
         "Dapper": {
           "target": "Package",
           "version": "[1.60.6, )"
         },
+        "MassTransit": {
+          "target": "Package",
+          "version": "[5.1.4, )"
+        },
+        "MassTransit.Extensions.DependencyInjection": {
+          "target": "Package",
+          "version": "[5.1.4, )"
+        },
         "MassTransit.RabbitMQ": {
           "target": "Package",
-          "version": "[5.5.0-develop.2000, )"
+          "version": "[5.1.4, )"
         },
         "Microsoft.AspNetCore.App": {
           "suppressParent": "All",

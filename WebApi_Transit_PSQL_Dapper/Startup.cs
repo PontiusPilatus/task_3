@@ -1,26 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WebApi_Transit_PSQL_Dapper.BusinessLogic;
 using WebApi_Transit_PSQL_Dapper.Services;
 using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.Hosting;
+using WebApi_Transit_PSQL_Dapper.Bus;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using WebApi_Transit_PSQL_Dapper.BusinessLogic.Consumers;
 
 namespace WebApi_Transit_PSQL_Dapper
 {
     public class Startup
     {
-        // Bus instance
-        private IBus _bus;
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,18 +35,37 @@ namespace WebApi_Transit_PSQL_Dapper
 
             // Dependency Injection
             services.AddScoped<GetCoursesInfoRequestHandler>();
+            services.AddScoped<AddCourseInfoRequestHandler>();
+            services.AddScoped<GetAllCoursesInfoRequestHandler>();
+            services.AddScoped<UpdateCourseInfoRequestHandler>();
+            services.AddScoped<DeleteCourseInfoRequestHandler>();
             services.AddScoped<ICourseInfoService, CourseInfoService>();
-            // Bus configuration
-            _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
-                var host = cfg.Host(new Uri("rabbitmq://localhost"), _host =>
-                {
-                    _host.Username("guest");
-                    _host.Password("guest");
-                });
-            });
-            services.AddSingleton<IBus>(_bus);
             
+            // Bus configuration
+            services.AddScoped<UpdateCourseInfoMessageHandler>();
+            services.AddMassTransit(c =>
+            {
+                c.AddConsumer<UpdateCourseInfoMessageHandler>();
+            });
+            
+
+            services.AddSingleton(provider => MassTransit.Bus.Factory.CreateUsingRabbitMq(cfg =>
+            {
+                var host = cfg.Host("localhost", "/", h => { });
+
+                cfg.ReceiveEndpoint(host, "web-service-endpoint", e =>
+                {
+                    e.PrefetchCount = 16;
+                    e.LoadFrom(provider);
+                });
+            }));
+
+            //services.AddSingleton<IPublishEndpoint>(provider => provider.GetRequiredService<IBusControl>());
+            //services.AddSingleton<ISendEndpointProvider>(provider => provider.GetRequiredService<IBusControl>());
+            services.AddSingleton<IBus>(provider => provider.GetRequiredService<IBusControl>());
+            //if do this we can use IRequestClient in controller at this time being I only use IBus
+            //services.AddScoped(provider => provider.GetRequiredService<IBus>().CreateRequestClient<SendMessageConsumer>());
+            services.AddSingleton<IHostedService, BusService>();  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

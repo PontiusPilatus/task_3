@@ -5,24 +5,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Bus\Consumers" />
         <Folder Include="wwwroot\" />
+        <Folder Include="BusinessLogic\Consumers\" />
+        <Folder Include="Models\Messages\" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection">
-          <Version>4.4.0</Version>
+        <PackageReference Include="Dapper" Version="1.60.6">
         </PackageReference>
-        <PackageReference Include="Dapper">
-          <Version>1.60.6</Version>
+        <PackageReference Include="MassTransit" Version="5.1.4">
         </PackageReference>
-        <PackageReference Include="MassTransit.RabbitMQ">
-          <Version>5.5.0-develop.2000</Version>
+        <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="5.1.4">
+        </PackageReference>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="5.1.4">
         </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Npgsql">
-          <Version>4.0.6</Version>
+        <PackageReference Include="Npgsql" Version="4.0.6">
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Controllers\UpdateCourseInfoRequestHandler.cs" />
+      <Compile Remove="Bus\Consumers\GetCourseInfoConsumer.cs" />
+    </ItemGroup>
 </Project>
