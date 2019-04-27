@@ -55,10 +55,8 @@ namespace WebApi_Transit_PSQL_Dapper.Controllers
         [HttpPut("{id}")]
         public async Task UpdateCourseInfo(int id, Course course)
         {
-            //return _updateCourseInfoRequestHandler.Handle(id, course);
-            Console.WriteLine($">>>>>>>>>>>>>>>>>>>>>>> UPDATE {id}: {course.Name}");
-            await _bus.Publish<UpdateMessage>(
-                new { Id = id, Course = course });
+            var endpoint = await _bus.GetSendEndpoint(new Uri("rabbitmq://localhost/UpdatingCourseQueue"));
+            await endpoint.Send(new UpdateMessage { Id = id, Course = course });
             return;
         }
 

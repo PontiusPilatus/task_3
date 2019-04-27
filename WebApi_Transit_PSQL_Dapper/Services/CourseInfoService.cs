@@ -9,6 +9,7 @@ namespace WebApi_Transit_PSQL_Dapper.Services
 {
     public class CourseInfoService : ICourseInfoService
     {
+        // CHANGE ME
         private const string ConnectionString =
             "host=localhost;port=5432;database=test;username=test;password=test";
 
@@ -35,10 +36,10 @@ namespace WebApi_Transit_PSQL_Dapper.Services
             using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 return await connection.ExecuteAsync(
-                    "INSERT INTO module_task_table (id, name, hours)" +
-                    "VALUES (@id, @name, @hours)", new
+                    "INSERT INTO module_task_table (name, hours)" +
+                    "VALUES (@name, @hours)", new
                     {
-                        id = course.Id, name = course.Name, hours = course.Hours
+                        name = course.Name, hours = course.Hours
                     });
             }
         }
@@ -50,10 +51,9 @@ namespace WebApi_Transit_PSQL_Dapper.Services
                  
                 var result =  await connection.QueryFirstOrDefaultAsync<Course>(
                     "SELECT * FROM module_task_table WHERE id = @id ", new {
-                    id = course.Id//, name = course.Name, hours = course.Hours
+                        id = course.Id
                     });
                 return result;
-                //and name = @name ands hours = @hours
             }
         }
 

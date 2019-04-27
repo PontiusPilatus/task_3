@@ -53,18 +53,14 @@ namespace WebApi_Transit_PSQL_Dapper
             {
                 var host = cfg.Host("localhost", "/", h => { });
 
-                cfg.ReceiveEndpoint(host, "web-service-endpoint", e =>
+                cfg.ReceiveEndpoint(host, "UpdatingCourseQueue", e =>
                 {
                     e.PrefetchCount = 16;
                     e.LoadFrom(provider);
                 });
             }));
 
-            //services.AddSingleton<IPublishEndpoint>(provider => provider.GetRequiredService<IBusControl>());
-            //services.AddSingleton<ISendEndpointProvider>(provider => provider.GetRequiredService<IBusControl>());
             services.AddSingleton<IBus>(provider => provider.GetRequiredService<IBusControl>());
-            //if do this we can use IRequestClient in controller at this time being I only use IBus
-            //services.AddScoped(provider => provider.GetRequiredService<IBus>().CreateRequestClient<SendMessageConsumer>());
             services.AddSingleton<IHostedService, BusService>();  
         }
 
