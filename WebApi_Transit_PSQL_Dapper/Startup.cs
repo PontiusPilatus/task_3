@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using WebApi_Transit_PSQL_Dapper.Bus;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using WebApi_Transit_PSQL_Dapper.BusinessLogic.Consumers;
+using WebApi_Transit_PSQL_Dapper.Models;
 
 namespace WebApi_Transit_PSQL_Dapper
 {
@@ -57,6 +58,7 @@ namespace WebApi_Transit_PSQL_Dapper
                 {
                     e.PrefetchCount = 16;
                     e.LoadFrom(provider);
+                    EndpointConvention.Map<UpdateMessage>(e.InputAddress);
                 });
             }));
 

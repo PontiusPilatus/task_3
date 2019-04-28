@@ -17,11 +17,6 @@ namespace WebApi_Transit_PSQL_Dapper.BusinessLogic.Consumers
 
         public Task Consume(ConsumeContext<UpdateMessage> context)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\nReceived Message: {context.Message.Id} :" +
-                $" {context.Message.Course.Id}/{context.Message.Course.Name}/{context.Message.Course.Hours}\n");
-            Console.ResetColor();
-
             _courseInfoService.Update(context.Message.Id,
                                              context.Message.Course);
             return Task.CompletedTask;

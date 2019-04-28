@@ -18,20 +18,18 @@ namespace WebApi_Transit_PSQL_Dapper.Controllers
         private readonly AddCourseInfoRequestHandler _addCourseInfoRequestHandler;
         private readonly UpdateCourseInfoRequestHandler _updateCourseInfoRequestHandler;
         private readonly DeleteCourseInfoRequestHandler _deleteCourseInfoRequestHandler;
-        private readonly IBus _bus;
+        
         public CoursesController(GetCoursesInfoRequestHandler getCoursesInfoRequestHandler,
                                  GetAllCoursesInfoRequestHandler getAllCoursesInfoRequestHandler,
                                  AddCourseInfoRequestHandler addCourseInfoRequestHandler,
                                  UpdateCourseInfoRequestHandler updateCourseRequestHandler,
-                                 DeleteCourseInfoRequestHandler deleteCourseInfoRequestHandler,
-                                 IBus bus)
+                                 DeleteCourseInfoRequestHandler deleteCourseInfoRequestHandler)
         {
             _getCoursesInfoRequestHandler = getCoursesInfoRequestHandler;
             _getAllCoursesInfoRequestHandler = getAllCoursesInfoRequestHandler;
             _addCourseInfoRequestHandler = addCourseInfoRequestHandler;
             _updateCourseInfoRequestHandler = updateCourseRequestHandler;
             _deleteCourseInfoRequestHandler = deleteCourseInfoRequestHandler;
-            _bus = bus;
         }
 
         [HttpGet]
@@ -53,11 +51,9 @@ namespace WebApi_Transit_PSQL_Dapper.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task UpdateCourseInfo(int id, Course course)
+        public Task UpdateCourseInfo(int id, Course course)
         {
-            var endpoint = await _bus.GetSendEndpoint(new Uri("rabbitmq://localhost/UpdatingCourseQueue"));
-            await endpoint.Send(new UpdateMessage { Id = id, Course = course });
-            return;
+            return _updateCourseInfoRequestHandler.Handle(id, course);
         }
 
         [HttpDelete("{id}")]
